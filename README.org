@@ -1,0 +1,38 @@
+
+* Modelo
+
+Usamos o modelo já conhecido para o TSP convencional como base
+
+\begin{align*}
+\min \sum c_{e} x_{e}& \\
+\sum \limits_{e \in \delta(v)} x_{e} &= 2 v \in V \\
+\sum \limits_{e \in \delta(S)} x_{e} &\leq |S| -1 S \subset V
+\end{align*}
+
+No nosso caso, temos que resolver dois TSP's mas que as soluções possuam $k$ arestas em comum.
+
+No nosso modelo $x_{e}^{1}$ indica que usamos a aresta $e$ para o tuor $1$ o respectivo para o tuor 2 e $D_{e}$ indica se a aresta está duplicada.
+
+Nossa função objetivo pode ser a soma dos custos dos dois tuors, ou seja
+\[  \min \sum \limits_{e \in E} \sum \limits_{i \in \{1,2\}} c_{e} x_{e}^{i}. \]
+
+Repetimos as restrições do TSP para cada um dos tuors.
+\begin{align*}
+\sum \limits_{e \in \delta(v)} x_{e}^{i} &= 2 v \in V \ \forall i \in \{1,2\} \\
+\sum \limits_{e \in \delta(S)} x_{e}^{i} &\leq |S| -1 \ \forall S \subset V \ \forall i \in \{1,2\}
+\end{align*}
+
+É importante notar que a segunda equação dá origem a quantidade exponencial de restrições de eliminação de subtuor. No nosso código, podemos circundar esse problema adicionando as restrições conforme se faz necessário. Assim, quando o modelo termina com um certo conjunto de restrições, podemos conferir, por meio de uma busca de profundidade, se é uma solução viável considerando a restrição de subtuor. Caso não seja, adicionamos as restrições de subtuor que evitam essa solução. Fazemos isso até encontrarmos uma solução viável.
+
+Por fim, adicionamos as restrições que exigem a quantidade de arestas compartilhadas.
+\[ x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\} \]
+
+Assim, nosso modelo final é
+\begin{align*}
+\min \sum \limits_{e \in E} \sum \limits_{i \in \{1,2\}} c_{e} x_{e}^{i}& \\
+\sum \limits_{e \in \delta(v)} x_{e}^{i} &= 2 \ \forall v \in V \ \forall i \in \{1,2\} \\
+\sum \limits_{e \in \delta(S)} x_{e}^{i} &\leq |S| -1 \ \forall S \subset V \forall i \in \{1,2\} \\
+x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\}
+\end{align*}
+* Fontes
+https://colab.research.google.com/github/Gurobi/modeling-examples/blob/master/traveling_salesman/tsp_gcl.ipynb
