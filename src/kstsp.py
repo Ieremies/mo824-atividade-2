@@ -60,6 +60,15 @@ def subtourelim(model, where):
         if len(tour) < len(capitals):
             # add subtour elimination constr. for every pair of cities in subtour
             model.cbLazy(gp.quicksum(model._vars0[i, j] for i, j in combinations(tour, 2)) <= len(tour)-1)
+        # Tuor 1
+        vals = model.cbGetSolution(model._vars1)
+        selected = gp.tuplelist((i, j) for i, j in model._vars1.keys() if vals[i, j] > 0.5)
+        # find the shortest cycle in the selected edge list
+        tour = subtour(selected)
+        if len(tour) < len(capitals):
+            # add subtour elimination constr. for every pair of cities in subtour
+            model.cbLazy(gp.quicksum(model._vars1[i, j] for i, j in combinations(tour, 2)) <= len(tour)-1)
+
 
 # Given a tuplelist of edges, find the shortest subtour
 
@@ -85,11 +94,12 @@ m.optimize(subtourelim)
 
 # Retrieve solution
 
-# vals0 = m.getAttr('x_0', vars0)
-# vals1 = m.getAttr('x_1', vars1)
-# selected0 = gp.tuplelist((i, j) for i, j in vals0.keys() if vals[i, j] > 0.5)
-# selected1 = gp.tuplelist((i, j) for i, j in vals1.keys() if vals[i, j] > 0.5)
+vals0 = m.getAttr('x', vars0)
+vals1 = m.getAttr('x', vars1)
+selected0 = gp.tuplelist((i, j) for i, j in vals0.keys() if vals0[i, j] > 0.5)
+selected1 = gp.tuplelist((i, j) for i, j in vals1.keys() if vals1[i, j] > 0.5)
 
-# tour0 = subtour(selected0)
-# tour1 = subtour(selected1)
-# #assert len(tour) == len(capitals)
+tour0 = subtour(selected0)
+tour1 = subtour(selected1)
+assert len(tour0) == len(capitals)
+assert len(tour1) == len(capitals)
