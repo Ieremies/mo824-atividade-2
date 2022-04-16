@@ -1,4 +1,4 @@
-% Created 2022-04-11 seg 22:43
+% Created 2022-04-16 sáb 20:42
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -45,7 +45,7 @@
 \tableofcontents
 
 \section{Modelo}
-\label{sec:org51a1b3e}
+\label{sec:org8127e03}
 
 Usamos o modelo já conhecido para o TSP convencional como base
 
@@ -71,16 +71,50 @@ Repetimos as restrições do TSP para cada um dos tuors.
 É importante notar que a segunda equação dá origem a quantidade exponencial de restrições de eliminação de subtuor. No nosso código, podemos circundar esse problema adicionando as restrições conforme se faz necessário. Assim, quando o modelo termina com um certo conjunto de restrições, podemos conferir, por meio de uma busca de profundidade, se é uma solução viável considerando a restrição de subtuor. Caso não seja, adicionamos as restrições de subtuor que evitam essa solução. Fazemos isso até encontrarmos uma solução viável.
 
 Por fim, adicionamos as restrições que exigem a quantidade de arestas compartilhadas.
-\[ x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\} \]
+\begin{align*}
+x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\} \\
+\sum \limits_{e \in E} D_{e} &\geq k
+\end{align*}
 
 Assim, nosso modelo final é
 \begin{align*}
 \min \sum \limits_{e \in E} \sum \limits_{i \in \{1,2\}} c_{e} x_{e}^{i}& \\
 \sum \limits_{e \in \delta(v)} x_{e}^{i} &= 2 \ \forall v \in V \ \forall i \in \{1,2\} \\
 \sum \limits_{e \in \delta(S)} x_{e}^{i} &\leq |S| -1 \ \forall S \subset V \forall i \in \{1,2\} \\
-x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\}
+x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\} \\
+\sum \limits_{e \in E} D_{e} &\geq k
 \end{align*}
+
+\section{Geração de instâncias}
+\label{sec:orgf5cbc12}
+Para testar nosso modelo, utilizamos o arquivo de coordenadas disponibilizado pelo professor para calcular nossos custos de arestas. Assim, para instâncias de 100 cidades, utilizamos as 100 primeiras linhas do arquivo.
+
+Durante os testes, modificamos a quantidade de cidades (\(100\), \(150\), \(200\) e \(250\)) e o valor de \(k\) (zero, metade da quantidade de cidades e a quantidade de cidades).
+\section{Resultados}
+\label{sec:orgc49a92c}
+
+Realizamos os testes em um computador equipado de um processador i5 de oitava geração, com 4 cores e 8 threads a 1.6ghz (max boost 3.2) e 8gb de ram, sem swap, com sistema operacional Linux 64bits. 
+
+
+\begin{table}[htbp]
+\caption{Métricas do modelo para as instâncias citadas no formato custo, gap e tempo de execução.}
+\centering
+\begin{tabular}{llll}
+ & \(k=0\) & \(k=\frac{v}{2}\) & \(k = v\)\\
+\hline
+\(v = 100\) & (1630, 0\%, 12.46) & (2102, 0\%, 51.23) & (3463, 0\%, 18.29)\\
+\(v = 150\) & (1966, 0\%, 79.01) & (2748, 0\%, 565.42) & (4780, 0\%, 36.89)\\
+\(v = 200\) & (2308, 0\%, 208.72) & (3458, 0\%, ) & (6003, 0\%, 112.67)\\
+\(v = 250\) & (2916, 11.1\%, 1113) & (7525, 0\%, ) & (6999, 0\%, )\\
+\end{tabular}
+\end{table}
+
+É importante ressaltar que a instância com \(v=250\) e \(k=0\) foi finalizada pelo sistema operacional por falta de memória ram. O resultado reportador aqui é da última atualização fornecida pelo Gurobi.
+
+\section{Análise}
+\label{sec:org28fc642}
+Observando as métricas obtidas, vemos os piores tempos de execução são encontrados quando \(k = \frac{v}{2}\).
 \section{Fontes}
-\label{sec:orga22c22d}
+\label{sec:orge1b2eb8}
 \url{https://colab.research.google.com/github/Gurobi/modeling-examples/blob/master/traveling\_salesman/tsp\_gcl.ipynb}
 \end{document}

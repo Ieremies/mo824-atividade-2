@@ -42,19 +42,22 @@ x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\} \\
 * Geração de instâncias
 Para testar nosso modelo, utilizamos o arquivo de coordenadas disponibilizado pelo professor para calcular nossos custos de arestas. Assim, para instâncias de 100 cidades, utilizamos as 100 primeiras linhas do arquivo.
 
-Durante os testes, modificamos a quantidade de cidades ($100$,$150$,$200$ e $250$) e o valor de $k$ (zero, metade da quantidade de cidades e a quantidade de cidades).
+Durante os testes, modificamos a quantidade de cidades ($100$, $150$, $200$ e $250$) e o valor de $k$ (zero, metade da quantidade de cidades e a quantidade de cidades).
 * Resultados
 
-Realizamos os testes em um computador equipado de um processador i5 de oitava geração, com 4 cores e 8 threads a 1.6ghz (max boost 3.2) e 8gb de ram, sem swap. Na
+Realizamos os testes em um computador equipado de um processador i5 de oitava geração, com 4 cores e 8 threads a 1.6ghz (max boost 3.2) e 8gb de ram, sem swap, com sistema operacional Linux 64bits. 
 
 
-#+caption: Métricas do modelo para as instâncias citadas.
-| (custo, gap, tempo(s)) | $k=0$ | $k=\frac{v}{2}$ | $k = v$ |
-|---------------------+---+---------------+-----|
-|                 $v = 100$ | (1630, 0%, 12.46) |               |     |
-|                 $v = 150$ | (1966, 0%, 79.01) |               |     |
-|                 $v = 200$ |   |               |     |
-|                 $v = 250$ |   |               |     |
+#+caption: Métricas do modelo para as instâncias citadas no formato custo, gap e tempo de execução.
+|           | $k=0$               | $k=\frac{v}{2}$    | $k = v$            |
+|-----------+---------------------+--------------------+--------------------|
+| $v = 100$ | (1630, 0%, 12.46)   | (2102, 0%, 51.23)  | (3463, 0%, 18.29)  |
+| $v = 150$ | (1966, 0%, 79.01)   | (2748, 0%, 565.42) | (4780, 0%, 36.89)  |
+| $v = 200$ | (2308, 0%, 208.72)  | (3458, 0%, )       | (6003, 0%, 112.67) |
+| $v = 250$ | (2916, 11.1%, 1113) | (7525, 0%, )       | (6999, 0%, 596.74) |
+
+É importante ressaltar que a instância com $v=250$ e $k=0$ foi finalizada pelo sistema operacional por falta de memória ram. O resultado reportador aqui é da última atualização fornecida pelo Gurobi.
+
 * Análise
 Observando as métricas obtidas, vemos os piores tempos de execução são encontrados quando $k = \frac{v}{2}$.
 * Fontes

@@ -30,7 +30,7 @@ m = gp.Model()
 # Variables: is city 'i' adjacent to city 'j' on the tour?
 vars0 = m.addVars(dist[0].keys(), obj=dist[0], vtype=GRB.BINARY, name='x_0')
 vars1 = m.addVars(dist[1].keys(), obj=dist[1], vtype=GRB.BINARY, name='x_1')
-dup = m.addVars([(c1,c2) for c1 in capitals for c2 in capitals], obj=0, vtype=GRB.BINARY, name="D")
+dup = m.addVars(dist[0].keys(), vtype=GRB.BINARY, name="D")
 
 # Symmetric direction: Copy the object
 for i, j in vars0.keys():
@@ -39,17 +39,15 @@ for i, j in vars1.keys():
     vars1[j, i] = vars1[i, j]  # edge in opposite direction
 
 # Constraints: two edges incident to each city
-cons0 = m.addConstrs(vars0.sum(c, '*') == 2 for c in capitals)
-cons1 = m.addConstrs(vars1.sum(c, '*') == 2 for c in capitals)
+m.addConstrs(vars0.sum(c, '*') == 2 for c in capitals)
+m.addConstrs(vars1.sum(c, '*') == 2 for c in capitals)
 
-# restrições de D_e
-m.addConstrs(vars0[k] >= dup[k] for k in vars0.keys())
-m.addConstrs(vars1[k] >= dup[k] for k in vars1.keys())
-m.addConstr(dup.sum("*") >= int(argv[2])) # mudar para K
-
+# Edge duplication restrains
+m.addConstrs(vars0[k] >= dup[k] for k in dist[0].keys())
+m.addConstrs(vars1[k] >= dup[k] for k in dist[1].keys())
+m.addConstr(dup.sum("*") >= int(argv[2]))
 
 # Callback - use lazy constraints to eliminate sub-tours
-
 def subtourelim(model, where):
     if where == GRB.Callback.MIPSOL:
         # make a list of edges selected in the solution
@@ -71,7 +69,6 @@ def subtourelim(model, where):
 
 
 # Given a tuplelist of edges, find the shortest subtour
-
 def subtour(edges):
     unvisited = capitals[:]
     cycle = capitals[:] # Dummy - guaranteed to be replaced
@@ -87,13 +84,13 @@ def subtour(edges):
             cycle = thiscycle # New shortest subtour
     return cycle
 
+
 m._vars0 = vars0
 m._vars1 = vars1
 m.Params.lazyConstraints = 1
 m.optimize(subtourelim)
 
 # Retrieve solution
-
 vals0 = m.getAttr('x', vars0)
 vals1 = m.getAttr('x', vars1)
 selected0 = gp.tuplelist((i, j) for i, j in vals0.keys() if vals0[i, j] > 0.5)
