@@ -28,7 +28,7 @@
 \newtheorem{coro}{Corolario}[section]
 \theoremstyle{definition}
 \newtheorem{prep}{Preposição}[section]
-\author{Ieremies Romero, Gian Franco, Gabriel Branco}
+\author{Ieremies Romero, Gian Franco Condori Luna, Gabriel Branco}
 \date{\today}
 \title{Atividade 2 - MO824}
 \hypersetup{
@@ -61,25 +61,27 @@ No nosso caso, temos que resolver dois TSP's mas que as soluções possuam \(k\)
 No nosso modelo \(x_{e}^{1}\) indica que usamos a aresta \(e\) para o tuor \(1\) o respectivo para o tuor 2 e \(D_{e}\) indica se a aresta está duplicada.
 
 Nossa função objetivo pode ser a soma dos custos dos dois tuors, ou seja
-\[  \min \sum \limits_{e \in E} \sum \limits_{i \in \{1,2\}} c_{e} x_{e}^{i}. \]
+\[  \min \sum \limits_{e \in E} \sum \limits_{i \in \{1,2\}} c_{e}^{i} x_{e}^{i}. \]
 
 Repetimos as restrições do TSP para cada um dos tuors.
 \begin{align*}
-\sum \limits_{e \in \delta(v)} x_{e}^{i} &= 2 v \in V \ \forall i \in \{1,2\} \\
-\sum \limits_{e \in \delta(S)} x_{e}^{i} &\leq |S| -1 \ \forall S \subset V \ \forall i \in \{1,2\}
+\sum \limits_{e \in \delta(v)} x_{e}^{i} &= 2 \hspace{3em} v \in V \ \forall i \in \{1,2\} \\
+\sum \limits_{e \in \delta(S)} x_{e}^{i} &\leq |S| -1 \hspace{2em}\ \forall S \subset V \ \forall i \in \{1,2\}
 \end{align*}
 
 É importante notar que a segunda equação dá origem a quantidade exponencial de restrições de eliminação de subtuor. No nosso código, podemos circundar esse problema adicionando as restrições conforme se faz necessário. Assim, quando o modelo termina com um certo conjunto de restrições, podemos conferir, por meio de uma busca de profundidade, se é uma solução viável considerando a restrição de subtuor. Caso não seja, adicionamos as restrições de subtuor que evitam essa solução. Fazemos isso até encontrarmos uma solução viável.
 
 Por fim, adicionamos as restrições que exigem a quantidade de arestas compartilhadas.
 \begin{align*}
-x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\} \\
+x_{e}^{i} &\geq D_{e} \hspace{3em}\ \forall e \in E \ \forall i \in \{1,2\}
+\end{align*}
+\begin{align*}
 \sum \limits_{e \in E} D_{e} &\geq k
 \end{align*}
 
 Assim, nosso modelo final é
 \begin{align*}
-\min \sum \limits_{e \in E} \sum \limits_{i \in \{1,2\}} c_{e} x_{e}^{i}& \\
+\min \sum \limits_{e \in E} \sum \limits_{i \in \{1,2\}} c_{e}^{i} x_{e}^{i}& \\
 \sum \limits_{e \in \delta(v)} x_{e}^{i} &= 2 \ \forall v \in V \ \forall i \in \{1,2\} \\
 \sum \limits_{e \in \delta(S)} x_{e}^{i} &\leq |S| -1 \ \forall S \subset V \forall i \in \{1,2\} \\
 x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\} \\
@@ -116,6 +118,8 @@ Realizamos os testes em um computador equipado de um processador i5 de oitava ge
 \section*{Análise}
 \label{sec:org7143c1c}
 Observando as métricas obtidas, vemos os piores tempos de execução são encontrados quando \(k = \frac{v}{2}\), com as instâncias maiores demorando consideravelmente a terminar, muitas vezes sem achar uma solução ótima. Além disso, apesar não diretamente mostrado na tabela, observamos que o tempo gasto adicionando restrições de forma "lazy" é consideravelmente pequeno em comparação com o tempo total.
+
+O tempo de execução de um problema TSP é um fator polinomial de ordem O(n!). Nosso modelo usa um tempo polinomial para encontrar a solução ótima.
 \section*{Fontes}
 \label{sec:org013517e}
 \url{https://colab.research.google.com/github/Gurobi/modeling-examples/blob/master/traveling\_salesman/tsp\_gcl.ipynb}
