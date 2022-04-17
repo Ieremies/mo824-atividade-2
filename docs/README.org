@@ -1,3 +1,7 @@
+#+title: Atividade 2 - MO824
+#+author: Ieremies Romero, Gian Franco, Gabriel Branco
+#+options: toc:nil num:nil
+
 
 * Modelo
 
@@ -49,16 +53,17 @@ Realizamos os testes em um computador equipado de um processador i5 de oitava ge
 
 
 #+caption: Métricas do modelo para as instâncias citadas no formato custo, gap e tempo de execução.
-|           | $k=0$               | $k=\frac{v}{2}$    | $k = v$            |
-|-----------+---------------------+--------------------+--------------------|
-| $v = 100$ | (1630, 0%, 12.46)   | (2102, 0%, 51.23)  | (3463, 0%, 18.29)  |
-| $v = 150$ | (1966, 0%, 79.01)   | (2748, 0%, 565.42) | (4780, 0%, 36.89)  |
-| $v = 200$ | (2308, 0%, 208.72)  | (3458, 0%, )       | (6003, 0%, 112.67) |
-| $v = 250$ | (2916, 11.1%, 1113) | (7525, 0%, )       | (6999, 0%, 596.74) |
+|           | $k=0$               | $k=\frac{v}{2}$     | $k = v$            |
+|-----------+---------------------+---------------------+--------------------|
+| $v = 100$ | (1630, 0%, 12.46)   | (2102, 0%, 51.23)   | (3463, 0%, 18.29)  |
+| $v = 150$ | (1966, 0%, 79.01)   | (2748, 0%, 565.42)  | (4780, 0%, 36.89)  |
+| $v = 200$ | (2308, 0%, 208.72)  | (17763, 80.9%,2048) | (6003, 0%, 112.67) |
+| $v = 250$ | (2916, 11.1%, 1113) | (7525, 0%, )        | (6999, 0%, 596.74) |
 
-É importante ressaltar que a instância com $v=250$ e $k=0$ foi finalizada pelo sistema operacional por falta de memória ram. O resultado reportador aqui é da última atualização fornecida pelo Gurobi.
+
+É importante ressaltar que a instância com $v=250$ e $k=0$ foi finalizada pelo sistema operacional por falta de memória ram. O resultado reportado aqui é da última atualização fornecida pelo Gurobi.
 
 * Análise
-Observando as métricas obtidas, vemos os piores tempos de execução são encontrados quando $k = \frac{v}{2}$.
+Observando as métricas obtidas, vemos os piores tempos de execução são encontrados quando $k = \frac{v}{2}$, com as instâncias maiores demorando consideravelmente a terminar, muitas vezes sem achar uma solução ótima. Além disso, apesar não diretamente mostrado na tabela, observamos que o tempo gasto adicionando restrições de forma "lazy" é consideravelmente pequeno em comparação com o tempo total.
 * Fontes
 https://colab.research.google.com/github/Gurobi/modeling-examples/blob/master/traveling_salesman/tsp_gcl.ipynb

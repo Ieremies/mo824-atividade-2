@@ -1,4 +1,4 @@
-% Created 2022-04-16 sáb 20:42
+% Created 2022-04-16 sáb 21:20
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,12 +28,12 @@
 \newtheorem{coro}{Corolario}[section]
 \theoremstyle{definition}
 \newtheorem{prep}{Preposição}[section]
-\author{Ieremies Vieira da Fonseca Romero}
+\author{Ieremies Romero, Gian Franco, Gabriel Branco}
 \date{\today}
-\title{}
+\title{Atividade 2 - MO824}
 \hypersetup{
- pdfauthor={Ieremies Vieira da Fonseca Romero},
- pdftitle={},
+ pdfauthor={Ieremies Romero, Gian Franco, Gabriel Branco},
+ pdftitle={Atividade 2 - MO824},
  pdfkeywords={},
  pdfsubject={},
  pdfcreator={Emacs 27.2 (Org mode 9.6)}, 
@@ -42,10 +42,11 @@
 \addbibresource{~/arq/bib.bib}
 \begin{document}
 
-\tableofcontents
+\maketitle
 
-\section{Modelo}
-\label{sec:org8127e03}
+
+\section*{Modelo}
+\label{sec:org5ad2af7}
 
 Usamos o modelo já conhecido para o TSP convencional como base
 
@@ -85,13 +86,13 @@ x_{e}^{i} &\geq D_{e} \ \forall e \in E \ \forall i \in \{1,2\} \\
 \sum \limits_{e \in E} D_{e} &\geq k
 \end{align*}
 
-\section{Geração de instâncias}
-\label{sec:orgf5cbc12}
+\section*{Geração de instâncias}
+\label{sec:org682535d}
 Para testar nosso modelo, utilizamos o arquivo de coordenadas disponibilizado pelo professor para calcular nossos custos de arestas. Assim, para instâncias de 100 cidades, utilizamos as 100 primeiras linhas do arquivo.
 
 Durante os testes, modificamos a quantidade de cidades (\(100\), \(150\), \(200\) e \(250\)) e o valor de \(k\) (zero, metade da quantidade de cidades e a quantidade de cidades).
-\section{Resultados}
-\label{sec:orgc49a92c}
+\section*{Resultados}
+\label{sec:org130df22}
 
 Realizamos os testes em um computador equipado de um processador i5 de oitava geração, com 4 cores e 8 threads a 1.6ghz (max boost 3.2) e 8gb de ram, sem swap, com sistema operacional Linux 64bits. 
 
@@ -104,17 +105,18 @@ Realizamos os testes em um computador equipado de um processador i5 de oitava ge
 \hline
 \(v = 100\) & (1630, 0\%, 12.46) & (2102, 0\%, 51.23) & (3463, 0\%, 18.29)\\
 \(v = 150\) & (1966, 0\%, 79.01) & (2748, 0\%, 565.42) & (4780, 0\%, 36.89)\\
-\(v = 200\) & (2308, 0\%, 208.72) & (3458, 0\%, ) & (6003, 0\%, 112.67)\\
-\(v = 250\) & (2916, 11.1\%, 1113) & (7525, 0\%, ) & (6999, 0\%, )\\
+\(v = 200\) & (2308, 0\%, 208.72) & (17763, 80.9\%,2048) & (6003, 0\%, 112.67)\\
+\(v = 250\) & (2916, 11.1\%, 1113) & (7525, 0\%, ) & (6999, 0\%, 596.74)\\
 \end{tabular}
 \end{table}
 
-É importante ressaltar que a instância com \(v=250\) e \(k=0\) foi finalizada pelo sistema operacional por falta de memória ram. O resultado reportador aqui é da última atualização fornecida pelo Gurobi.
 
-\section{Análise}
-\label{sec:org28fc642}
-Observando as métricas obtidas, vemos os piores tempos de execução são encontrados quando \(k = \frac{v}{2}\).
-\section{Fontes}
-\label{sec:orge1b2eb8}
+É importante ressaltar que a instância com \(v=250\) e \(k=0\) foi finalizada pelo sistema operacional por falta de memória ram. O resultado reportado aqui é da última atualização fornecida pelo Gurobi.
+
+\section*{Análise}
+\label{sec:org7143c1c}
+Observando as métricas obtidas, vemos os piores tempos de execução são encontrados quando \(k = \frac{v}{2}\), com as instâncias maiores demorando consideravelmente a terminar, muitas vezes sem achar uma solução ótima. Além disso, apesar não diretamente mostrado na tabela, observamos que o tempo gasto adicionando restrições de forma "lazy" é consideravelmente pequeno em comparação com o tempo total.
+\section*{Fontes}
+\label{sec:org013517e}
 \url{https://colab.research.google.com/github/Gurobi/modeling-examples/blob/master/traveling\_salesman/tsp\_gcl.ipynb}
 \end{document}
